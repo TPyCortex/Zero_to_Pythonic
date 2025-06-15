@@ -1,2 +1,1 @@
-# Simple-budget-tracker
-A brutally honest UK tax + budgeting calculator in Python. Built to help you figure out if you can actually afford to eat out this month. Tracks income, expenses, loans, and your savings goal and gives feedback (Without Sugarcoating)
+A glorified Python trashcan holding everything I’m building as I learn Python, coding, and ML. It’s early-stage, a bit chaotic, and definitely not polished.
