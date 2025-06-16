@@ -8,6 +8,4 @@ A script that:
 
 ## 🚀 How to Run
 1. Install Python 3
-2. Run this script:
-```bash
-Monthly_budget_Homie.py
+2. Run this script
