@@ -1,6 +1,12 @@
 ## About
-This repository contains my learning projects as I develop Python and ML skills. Each project tackles real-world problems and demonstrates different programming concepts.
+This repository contains my Python projects as I build skills in programming and data analysis. Each project solves practical problems using core programming concepts like text processing, data manipulation, and automated analysis.
 
+**Technical Components:**
+- Text processing and pattern matching
+- File handling and data extraction  
+- Algorithm implementation for summarization
+- Error handling and robust file operations
+  
 ## Projects
 
 ### 1. Monthly Budget Calculator
