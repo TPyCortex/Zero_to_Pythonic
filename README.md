@@ -13,7 +13,7 @@ This repository contains my Python projects as I build skills in programming and
 - **File**: `Monthly_budget_Homie.py`  
 - **Description**: Calculates UK taxes, tracks expenses, and checks savings goals
 
-### 2. Meeting Transcript Analyzer
+### 2. Meeting Transcript Analyser
 - **File**: `meeting_min_analyser.py`
 - **Description**: Extracts participants, summaries, and action items from meeting transcripts
 - **Features**: Text processing, keyword extraction, automated insights
