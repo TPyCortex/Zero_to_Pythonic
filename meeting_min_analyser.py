@@ -3,14 +3,8 @@ import re
 import os
 from collections import Counter
 
-# --- Configuration ---
-# Change this to your actual file path
-TRANSCRIPT_FILE_PATH = "sample_transcript.txt"
-# Alternative examples:
-# Windows: "C:/Users/yourname/Documents/Meeting1.txt"
-# Mac: "/Users/yourname/Desktop/Meeting1.txt"
-# Linux: "/home/yourname/documents/Meeting1.txt"
-
+TRANSCRIPT_FILE_PATH = "sample_transcript.txt"          # Change this to your actual file path
+                                                        # Alternative examples: Windows: "C:/Users/yourname/Documents/Meeting1.txt", Mac: "/Users/yourname/Desktop/Meeting1.txt, Linux: "/home/yourname/documents/Meeting1.txt"
 def load_transcript():
     """Load transcript from file path with error handling."""
     try:
@@ -33,12 +27,9 @@ def load_transcript():
         return ""
 
 def clean_and_tokenize(text):
-    """Remove punctuation and convert to lowercase tokens."""
-    # Remove timestamps first (format: 00:00:00)
-    text = re.sub(r'\d{1,2}:\d{2}:\d{2}', '', text)
-    # Remove speaker names (format: **Name:** or Name:)
-    text = re.sub(r'\*\*[^:]+:\*\*|\b[A-Z][a-zA-Z\s]+:', '', text)
-    
+    """Remove punctuation and convert to lowercase tokens.""" 
+    text = re.sub(r'\d{1,2}:\d{2}:\d{2}', '', text)                   # Remove timestamps first (format: 00:00:00)
+    text = re.sub(r'\*\*[^:]+:\*\*|\b[A-Z][a-zA-Z\s]+:', '', text)    # Remove speaker names (format: **Name:** or Name:)
     translator = str.maketrans("", "", string.punctuation)
     return text.lower().translate(translator).split()
 
@@ -59,15 +50,12 @@ def word_frequencies(filtered_words):
 
 def split_sentences(text):
     """Split text into sentences with improved logic."""
-    # Remove timestamps and speaker labels first
     text = re.sub(r'\d{1,2}:\d{2}:\d{2}', '', text)
     text = re.sub(r'\*\*[^:]+:\*\*', '', text)
     
-    # Split on sentence endings but avoid common abbreviations
-    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\!|\?)\s+', text)
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\!|\?)\s+', text)              # Split on sentence endings but avoid common abbreviations
     
-    # Filter out very short sentences and clean up
-    return [s.strip() for s in sentences if len(s.strip()) > 15]
+    return [s.strip() for s in sentences if len(s.strip()) > 15]             # Filter out very short sentences and clean up
 
 def score_sentences(sentences, word_freq):
     """Score sentences based on word frequency and length."""
@@ -76,11 +64,11 @@ def score_sentences(sentences, word_freq):
         words = clean_and_tokenize(sentence)
         filtered_words = filter_stopwords(words)
         
-        # Calculate score as sum of word frequencies
-        raw_score = sum(word_freq.get(w, 0) for w in filtered_words)
+
+        raw_score = sum(word_freq.get(w, 0) for w in filtered_words)     # Calculate score as sum of word frequencies
         
-        # Normalize by sentence length to avoid bias toward long sentences
-        word_count = len(filtered_words)
+        
+        word_count = len(filtered_words)   # Normalize by sentence length to avoid bias toward long sentences
         if word_count > 0:
             normalized_score = raw_score / word_count
             scores[sentence] = normalized_score
@@ -109,8 +97,8 @@ def summarize(text, top_n=3):
     if not sentence_scores:
         return []
         
-    # Return top N sentences sorted by score
-    return sorted(sentence_scores.keys(), key=sentence_scores.get, reverse=True)[:top_n]
+    
+    return sorted(sentence_scores.keys(), key=sentence_scores.get, reverse=True)[:top_n]   # Return top N sentences sorted by score
 
 def extract_action_items(text):
     """Extract potential action items using pattern matching."""
@@ -139,7 +127,7 @@ def extract_action_items(text):
         for pattern in action_patterns:
             if re.search(pattern, sentence_lower):
                 actions.append(sentence)
-                break  # Avoid duplicate matches
+                break   # Avoid duplicate matches
                 
     return actions
 
@@ -149,17 +137,16 @@ def extract_key_topics(text, top_n=5):
     filtered_words = filter_stopwords(words)
     word_freq = word_frequencies(filtered_words)
     
-    # Get top N most frequent words
-    return [word for word, count in word_freq.most_common(top_n)]
+    return [word for word, count in word_freq.most_common(top_n)]   # Get top N most frequent words
 
 def extract_participants(text):
     """Extract participant names from transcript."""
-    # Look for speaker patterns: **Name:** or Name:
-    speaker_pattern = r'\*\*([^:]+):\*\*|^([A-Z][a-zA-Z\s]+):'
+
+    speaker_pattern = r'\*\*([^:]+):\*\*|^([A-Z][a-zA-Z\s]+):'  # Look for speaker patterns: **Name:** or Name:
     matches = re.findall(speaker_pattern, text, re.MULTILINE)
     
-    # Flatten the tuple results and remove empty strings
-    speakers = set()
+                   
+    speakers = set()    # Flatten the tuple results and remove empty strings
     for match in matches:
         speaker = match[0] if match[0] else match[1]
         if speaker.strip():
@@ -171,8 +158,8 @@ def main():
     """Main function to run the transcript analysis."""
     print("=== Meeting Transcript Analyzer ===\n")
     
-    # Load transcript
-    print(f"Loading transcript from: {TRANSCRIPT_FILE_PATH}")
+
+    print(f"Loading transcript from: {TRANSCRIPT_FILE_PATH}")      # Load transcript
     transcript = load_transcript()
     
     if not transcript:
@@ -181,16 +168,14 @@ def main():
     
     print(f"Transcript loaded successfully ({len(transcript)} characters)\n")
     
-    # Extract participants
-    participants = extract_participants(transcript)
+    participants = extract_participants(transcript)       # Extract participants
     if participants:
         print("--- Participants ---")
         for participant in sorted(participants):
             print(f"- {participant}")
         print()
     
-    # Generate summary
-    print("--- Meeting Summary ---")
+    print("--- Meeting Summary ---")       # Generate summary
     summary_sentences = summarize(transcript, top_n=3)
     if summary_sentences:
         for i, sentence in enumerate(summary_sentences, 1):
@@ -199,8 +184,7 @@ def main():
         print("Could not generate summary from transcript.")
     print()
     
-    # Extract action items
-    print("--- Action Items ---")
+    print("--- Action Items ---")    # Extract action items
     action_items = extract_action_items(transcript)
     if action_items:
         for i, action in enumerate(action_items, 1):
@@ -209,8 +193,7 @@ def main():
         print("No clear action items found.")
     print()
     
-    # Extract key topics
-    print("--- Key Topics Discussed ---")
+    print("--- Key Topics Discussed ---")     # Extract key topics
     key_topics = extract_key_topics(transcript, top_n=5)
     if key_topics:
         print(", ".join(key_topics))
@@ -221,4 +204,5 @@ def main():
     print("=== Analysis Complete ===")
 
 if __name__ == "__main__":
+
     main()
